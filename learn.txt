@@ -1,0 +1,60 @@
+// lec-6: install nodemon
+
+app.get("/api/books/:id", (req, res) => {                            --> get book by id (use :)
+  const book = books.find(b => b.id === parseInt(req.params.id));    --> find book // use parse because (req.params.id) is string 
+  if (book) {
+    res.status(200).json(book)                                       --> 200 is successful / 404 is failed
+  } else{
+    res.status(404).json({ message: "book not found"})
+  }
+});
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+lec-7: post method in express JS
+
+//Apply Middlewares --> the data come from client is json, 
+//                      express does not know whats json because express its javaScript framework
+//                      express.json() --> convert json to javaScript object to read 
+app.use(express.json());
+
+app.post("/api/books", (req, res) => {
+  console.log(req.body);                --> print the object in terminal
+  const book = {
+    id: books.length + 1,
+    title: req.body.title,
+    author: req.body.author,
+    description: req.body.description,
+    price: req.body.price,
+    cover: req.body.cover
+  }
+
+  books.push(book);
+  res.status(201). json(book)           --> 201 created successfully
+});
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+lec-8: input validation
+ inside 
+app.post("/api/books", (req, res) => {
+
+const schema = Joi.object({   --> use joi library to check the data is correc or not 
+    title: Joi.string().trim().min(3).max(200).required(),
+    author: Joi.string().trim().min(3).max(200).required(),
+    description: Joi.string().trim().min(3).max(500).required(),
+    price: Joi.number().min(0).required(),
+    cover: Joi.string().trim().required(),
+  })
+
+  const { error } = schema.validate(req.body);
+  if (error) {
+    return res.status(400).json({message: error.details[0].message});
+  }
+
+  .
+  .
+  .
+
+});
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+lec-9: create book route
