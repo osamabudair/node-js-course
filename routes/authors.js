@@ -14,8 +14,10 @@ const { Author, validateCreateAuthor, validateUpdateAuthor } = require("../model
 // find all authors, sorted by first name, just select the first and last name and dont show the id
 // .sort({firstName: -1}).select("firstName lastName -_id")
 router.get("/",asycnHandler(
-  async (req, res) => {            
-    const authorList = await Author.find();
+  async (req, res) => {           
+    const { pageNumber } = req.query;
+    const authorPerPage = 2;
+    const authorList = await Author.find().skip((pageNumber -1) * authorPerPage ).limit(authorPerPage);
     res.status(200).json(authorList);
 }));
 

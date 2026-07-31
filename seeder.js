@@ -1,5 +1,6 @@
 const { Book } = require("./models/Book");
-const { books } = require("./data");
+const { Author } = require("./models/Author");
+const { books, authors } = require("./data");
 const connectToDB = require("./config/db");
 require("dotenv").config();
 
@@ -17,6 +18,17 @@ const importBooks = async () => {
   }
 }
 
+// Improt Authors
+const importAuthors = async () => {
+  try {
+    await Author.insertMany(authors);
+    console.log("Authors Imported");
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
 
 // Remove Books
 const removeBooks = async () => {
@@ -29,10 +41,25 @@ const removeBooks = async () => {
   }
 }
 
+// Remove Books
+const removeAuthors = async () => {
+  try {
+    await Author.deleteMany();  // remove all books in database
+    console.log("Books Removed");
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
 if (process.argv[2] === "-import") {
   importBooks();
 } else if (process.argv[2] === "-remove"){
   removeBooks();
+} else if (process.argv[2] === "-import-authors"){
+  importAuthors();
+} else if (process.argv[2] === "-remove-authors"){
+  removeAuthors();
 }
 
 
