@@ -4,6 +4,8 @@ const { notFound, errorHandler } = require("./middlewares/errors");
 const dotenv = require("dotenv").config();
 const connectToDB = require('./config/db');
 const path = require("path");
+const helmet = require("helmet");
+const cors = require("cors");
 
 // Connection To Database
 connectToDB();
@@ -21,6 +23,13 @@ app.use(express.urlencoded({ extended: false }));
 //Custom Middleware
 app.use(logger);
 
+// Helmet
+app.use(helmet());
+
+// CORS
+app.use(cors());
+
+// Set View Engine
 app.set('view engine', 'ejs');
 
 // Routes
